@@ -1,18 +1,57 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <navbar/>
+    <window/>
+    <modal v-model:showModal="showCreateChat">
+      <template v-slot:action>
+        <button @click="showCreateChat = true">
+          a
+        </button>
+      </template>
+      <template v-slot:default>
+        <create-chat/>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
-import HelloWorld from '@/components/HelloWorld.vue' // @ is an alias to /src
+import Navbar from '@/components/Navbar.vue'
+import Window from '@/components/Window.vue'
+import Modal from '@/components/Modal.vue'
+import CreateChat from '@/components/CreateChat.vue'
+import { computed, defineComponent, ref } from 'vue'
 
-@Options({
-  components: {
-    HelloWorld
-  }
+export default defineComponent({
+    name: 'Home',
+    components: {
+      Navbar,
+      Window,
+      Modal,
+      CreateChat
+    },
+    props: ['message'],
+    setup (props) {
+        const mine = computed(() => props.message % 2 === 0)
+        const showCreateChat = ref(false)
+        return { mine, showCreateChat }
+    }
 })
-export default class Home extends Vue {}
 </script>
+
+<style lang="scss" scoped>
+  .home {
+    display: flex;
+  }
+  button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    cursor: pointer;
+    height: 60px;
+    width: 60px;
+    border: none;
+    border-radius: 50%;
+    background: cadetblue;
+}
+</style>
